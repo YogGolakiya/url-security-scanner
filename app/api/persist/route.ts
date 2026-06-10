@@ -4,9 +4,9 @@ export const runtime = "nodejs";
 
 const EC_ID = process.env.EDGE_CONFIG_ID ?? "";
 const READ_TOKEN = process.env.EDGE_CONFIG_WRITE_TOKEN ?? "";
-// Edge Config items require the full Vercel API token for writes
-const VERCEL_API_TOKEN = process.env.VERCEL_TOKEN_FOR_EC ?? "";
-const TEAM_ID = process.env.VERCEL_TEAM_FOR_EC ?? process.env.VERCEL_TEAM_ID ?? "";
+// Edge Config items require the full Vercel API token for PATCH writes
+const VERCEL_API_TOKEN = process.env.EC_API_TOKEN ?? "";
+const TEAM_ID = process.env.EC_TEAM_ID ?? "";
 
 interface ScanRecord {
   url: string;
