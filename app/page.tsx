@@ -56,7 +56,25 @@ export default function Home() {
 
       setResult(data);
       setPhase("complete");
-      setHistoryTick((t) => t + 1);
+
+      // Persist to MongoDB from client — Edge runtime can't await background fetch
+      fetch("/api/persist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          url: data.url,
+          riskScore: data.riskScore,
+          verdict: data.verdict,
+          detectedThreats: data.detectedThreats,
+          summary: data.summary,
+          sslValid: data.ssl?.valid ?? false,
+          sslIssuer: data.ssl?.issuer ?? "Unknown",
+          sslExpiry: data.ssl?.expiry ?? "Unknown",
+          domainAge: data.domain?.age ?? "Unknown",
+          registrar: data.domain?.registrar ?? "Unknown",
+        }),
+      }).then(() => setHistoryTick((t) => t + 1)).catch(() => setHistoryTick((t) => t + 1));
+
     } catch {
       setPhase("aborted");
       setErrorMsg("Network failure — could not reach analysis engine.");

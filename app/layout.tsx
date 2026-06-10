@@ -9,7 +9,19 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "URL Threat Intelligence Platform — Digital Forensics Division",
-  description: "AI-powered URL security scanner with full forensic analysis, SSL inspection, domain intelligence, and threat synthesis.",
+  description: "AI-powered URL security scanner with full forensic analysis, SSL inspection, domain intelligence, and Gemini AI threat synthesis.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
+  openGraph: {
+    title: "URL Threat Intelligence Platform",
+    description: "Forensic-grade AI URL security scanner — SSL, domain, heuristic & Gemini AI analysis.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

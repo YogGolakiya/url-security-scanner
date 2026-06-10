@@ -68,18 +68,6 @@ export async function POST(req: NextRequest) {
       registrar: domain.registrar,
     }));
 
-    // Persist to DB asynchronously via separate API call (edge can't use mongoose)
-    fetch(new URL("/api/persist", req.url).toString(), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        url, riskScore: analysis.riskScore, verdict: analysis.verdict,
-        detectedThreats: heuristics.threats, summary: analysis.summary,
-        sslValid: ssl.valid, sslIssuer: ssl.issuer, sslExpiry: ssl.expiry,
-        domainAge: domain.domainAge, registrar: domain.registrar,
-      }),
-    }).catch(() => {});
-
     return NextResponse.json({
       status: "complete",
       url,
