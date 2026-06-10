@@ -62,7 +62,7 @@ Return ONLY this exact JSON structure:
   // Race with 8s timeout to stay within Vercel free-tier function limit
   const response = await Promise.race([
     model.generateContent(prompt),
-    new Promise<never>((_, rej) => setTimeout(() => rej(new Error("Gemini timeout")), 8000)),
+    new Promise<never>((_, rej) => setTimeout(() => rej(new Error("Gemini timeout")), 6000)),
   ]);
   const text = response.response.text().trim();
 
