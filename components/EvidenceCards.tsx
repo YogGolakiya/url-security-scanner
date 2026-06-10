@@ -63,7 +63,7 @@ export default function EvidenceCards({ result }: Props) {
           },
           { label: "Threat Count", value: `${result.detectedThreats.length} indicator${result.detectedThreats.length !== 1 ? "s" : ""}`, flag: result.detectedThreats.length > 0 },
           { label: "URL Length", value: `${result.url.length} chars`, flag: result.url.length > 100 },
-          { label: "AI Engine", value: result.aiSource === "gemini" ? "Gemini 1.5 Flash" : "Local Heuristic" },
+          { label: "AI Engine", value: result.aiSource === "gemini" ? "Gemini 2.5 Flash" : "Local Heuristic" },
         ]}
       />
     </div>

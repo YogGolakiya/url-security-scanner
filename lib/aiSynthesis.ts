@@ -37,7 +37,7 @@ export async function synthesizeWithAI(input: SynthesisInput): Promise<AIAnalysi
 
 async function callGemini(input: SynthesisInput, apiKey: string): Promise<AIAnalysis> {
   const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
   const prompt = `You are a cybersecurity threat intelligence analyst. Analyze the following URL forensic data and return ONLY a raw JSON object — no markdown, no code blocks, no explanation.
 
