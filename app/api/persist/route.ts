@@ -3,8 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 export const runtime = "nodejs";
 
 const EC_ID = process.env.EDGE_CONFIG_ID ?? "";
-const WRITE_TOKEN = process.env.EDGE_CONFIG_WRITE_TOKEN ?? "";
-const VERCEL_TOKEN = process.env.VERCEL_TOKEN_FOR_EC ?? WRITE_TOKEN;
+const READ_TOKEN = process.env.EDGE_CONFIG_WRITE_TOKEN ?? "";
+// Edge Config items require the full Vercel API token for writes
+const VERCEL_API_TOKEN = process.env.VERCEL_TOKEN_FOR_EC ?? "";
+const TEAM_ID = process.env.VERCEL_TEAM_FOR_EC ?? process.env.VERCEL_TEAM_ID ?? "";
 
 interface ScanRecord {
   url: string;
@@ -24,14 +26,14 @@ export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
 
-    if (!EC_ID || !WRITE_TOKEN) {
+    if (!EC_ID || !READ_TOKEN || !VERCEL_API_TOKEN) {
       console.warn("[persist] Edge Config not configured");
       return NextResponse.json({ ok: true });
     }
 
     // Read current scans
     const readRes = await fetch(
-      `https://edge-config.vercel.com/${EC_ID}/item/scans?token=${WRITE_TOKEN}`,
+      `https://edge-config.vercel.com/${EC_ID}/item/scans?token=${READ_TOKEN}`,
       { cache: "no-store" }
     );
     let scans: ScanRecord[] = [];
@@ -58,13 +60,14 @@ export async function POST(req: NextRequest) {
     };
     scans = [newRecord, ...scans].slice(0, 5);
 
-    // Write back via Edge Config API
+    // Write back via Edge Config API (requires full Vercel API token, not EC token)
+    const teamParam = TEAM_ID ? `?teamId=${TEAM_ID}` : "";
     const writeRes = await fetch(
-      `https://api.vercel.com/v1/edge-config/${EC_ID}/items`,
+      `https://api.vercel.com/v1/edge-config/${EC_ID}/items${teamParam}`,
       {
         method: "PATCH",
         headers: {
-          Authorization: `Bearer ${WRITE_TOKEN}`,
+          Authorization: `Bearer ${VERCEL_API_TOKEN}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
