@@ -8,7 +8,7 @@ import connectDB from "@/utils/db";
 import ScanModel from "@/models/Scan";
 
 export const runtime = "nodejs";
-export const maxDuration = 30;
+export const maxDuration = 25;
 
 export const POST = withErrorHandler(async (req: NextRequest) => {
   const body = await req.json().catch(() => ({}));

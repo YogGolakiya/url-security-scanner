@@ -59,7 +59,11 @@ Return ONLY this exact JSON structure:
   "summary": "<exactly 2 sentences, non-technical, describing the specific threat vector and recommended action>"
 }`;
 
-  const response = await model.generateContent(prompt);
+  // Race with 8s timeout to stay within Vercel free-tier function limit
+  const response = await Promise.race([
+    model.generateContent(prompt),
+    new Promise<never>((_, rej) => setTimeout(() => rej(new Error("Gemini timeout")), 8000)),
+  ]);
   const text = response.response.text().trim();
 
   // Strip markdown code blocks if present

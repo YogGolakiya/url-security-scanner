@@ -33,7 +33,7 @@ export async function checkSSL(url: string): Promise<SSLResult> {
       port: 443,
       servername: hostname,
       rejectUnauthorized: false,
-      timeout: 6000,
+      timeout: 4000,
     };
 
     try {
@@ -60,7 +60,7 @@ export async function checkSSL(url: string): Promise<SSLResult> {
         }
       });
 
-      socket.setTimeout(6000, () => {
+      socket.setTimeout(4000, () => {
         socket.destroy();
         resolve({ valid: false, issuer: "Timeout", expiry: "Unknown", daysUntilExpiry: -1, error: "Connection timeout" });
       });
