@@ -84,7 +84,7 @@ Return ONLY this exact JSON structure:
   };
 }
 
-function localFallback(input: SynthesisInput): AIAnalysis {
+export function localFallback(input: SynthesisInput): AIAnalysis {
   let score = input.heuristicScore;
 
   if (!input.sslValid) score += 15;
